@@ -2,7 +2,14 @@
     "name": "house-embla",
     "description": "My home automation",
     "version": "0.0.1",
-    "dependencies": {},
+    "dependencies": {
+        "node-red-contrib-alexa-smart-home": "0.4.68",
+        "node-red-contrib-cron-plus": "1.5.7",
+        "node-red-contrib-nordpool-api": "3.0.8",
+        "node-red-contrib-suncron": "1.6.1",
+        "node-red-contrib-ui-time-scheduler": "1.17.2",
+        "node-red-dashboard": "3.2.0"
+    },
     "node-red": {
         "settings": {
             "flowFile": "flows_raspberrypi.json",
