@@ -30,14 +30,6 @@
         "env": []
     },
     {
-        "id": "35da2bd8d0ae95d8",
-        "type": "tab",
-        "label": "Climate ENTSO-E",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "b9647c4eba6ade67",
         "type": "subflow",
         "name": "ENTSO-E",
@@ -73,11 +65,21 @@
                 "value": "https://web-api.tp.entsoe.eu/api",
                 "ui": {
                     "icon": "font-awesome/fa-database",
-                    "type": "input",
+                    "type": "select",
                     "opts": {
-                        "types": [
-                            "str",
-                            "env"
+                        "opts": [
+                            {
+                                "l": {
+                                    "en-US": "production"
+                                },
+                                "v": "https://web-api.tp.entsoe.eu/api"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "IOP"
+                                },
+                                "v": "https://web-api.tp-iop.entsoe.eu/api"
+                            }
                         ]
                     }
                 }
@@ -86,14 +88,7 @@
                 "name": "securityToken",
                 "type": "cred",
                 "ui": {
-                    "icon": "font-awesome/fa-user-secret",
-                    "type": "input",
-                    "opts": {
-                        "types": [
-                            "env",
-                            "cred"
-                        ]
-                    }
+                    "icon": "font-awesome/fa-key"
                 }
             },
             {
@@ -102,11 +97,15 @@
                 "value": "10Y1001A1001A46L",
                 "ui": {
                     "icon": "font-awesome/fa-flag",
-                    "type": "input",
+                    "type": "select",
                     "opts": {
-                        "types": [
-                            "str",
-                            "env"
+                        "opts": [
+                            {
+                                "l": {
+                                    "en-US": "SE3"
+                                },
+                                "v": "10Y1001A1001A46L"
+                            }
                         ]
                     }
                 }
@@ -119,15 +118,126 @@
             "license": "MIT"
         },
         "color": "#E9967A",
-        "icon": "font-awesome/fa-line-chart"
+        "icon": "font-awesome/fa-bar-chart"
     },
     {
         "id": "8a783104762ea0c8",
         "type": "subflow",
-        "name": "Subflow 1",
+        "name": "storage",
         "info": "",
-        "in": [],
-        "out": []
+        "category": "",
+        "in": [
+            {
+                "x": 80,
+                "y": 40,
+                "wires": [
+                    {
+                        "id": "080da032fdddfbae"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 240,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "404c797b63025f1f",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "533485cf0576576b",
+        "type": "subflow",
+        "name": "price adjustment",
+        "info": "",
+        "category": "smart home",
+        "in": [
+            {
+                "x": 280,
+                "y": 40,
+                "wires": [
+                    {
+                        "id": "44a060c49352d40d"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 750,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "76f22770a1ecdcc0",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 770,
+                "y": 200,
+                "wires": [
+                    {
+                        "id": "3b969228671a588c",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 750,
+                "y": 320,
+                "wires": [
+                    {
+                        "id": "645c244060a8ae8c",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "hours",
+                "type": "num",
+                "value": "12",
+                "ui": {
+                    "icon": "font-awesome/fa-hourglass-1",
+                    "type": "spinner",
+                    "opts": {
+                        "min": 1,
+                        "max": 36
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99",
+        "inputLabels": [
+            "trigger"
+        ],
+        "outputLabels": [
+            "prices",
+            "energy plan",
+            "energy"
+        ],
+        "icon": "font-awesome/fa-line-chart",
+        "status": {
+            "x": 840,
+            "y": 80,
+            "wires": [
+                {
+                    "id": "524537159b4aadd6",
+                    "port": 0
+                }
+            ]
+        }
     },
     {
         "id": "e74bea31.796858",
@@ -531,6 +641,399 @@
                 "6261159981a51639"
             ]
         ]
+    },
+    {
+        "id": "080da032fdddfbae",
+        "type": "change",
+        "z": "8a783104762ea0c8",
+        "name": "store",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "flow",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 210,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "404c797b63025f1f",
+        "type": "change",
+        "z": "8a783104762ea0c8",
+        "name": "load",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 110,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5a0561128a8b2e8c",
+        "type": "inject",
+        "z": "8a783104762ea0c8",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 180,
+        "wires": [
+            [
+                "404c797b63025f1f"
+            ]
+        ]
+    },
+    {
+        "id": "44a060c49352d40d",
+        "type": "subflow:b9647c4eba6ade67",
+        "z": "533485cf0576576b",
+        "name": "SE3",
+        "env": [
+            {
+                "name": "securityToken",
+                "type": "cred"
+            }
+        ],
+        "x": 410,
+        "y": 80,
+        "wires": [
+            [
+                "12ce2dc844d9a47d",
+                "76f22770a1ecdcc0"
+            ]
+        ]
+    },
+    {
+        "id": "b9ee29aa31132a57",
+        "type": "inject",
+        "z": "533485cf0576576b",
+        "name": "Daily",
+        "props": [],
+        "repeat": "",
+        "crontab": "50 13 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 270,
+        "y": 80,
+        "wires": [
+            [
+                "44a060c49352d40d"
+            ]
+        ]
+    },
+    {
+        "id": "c53ca1e996d473c2",
+        "type": "cronplus",
+        "z": "533485cf0576576b",
+        "name": "hourly price adjustment",
+        "outputField": "payload",
+        "timeZone": "",
+        "persistDynamic": false,
+        "commandResponseMsgOutput": "output1",
+        "outputs": 1,
+        "options": [
+            {
+                "name": "hourly price adjustment",
+                "topic": "prices",
+                "payloadType": "flow",
+                "payload": "prices",
+                "expressionType": "cron",
+                "expression": "0 * * * * * *",
+                "location": "",
+                "offset": "0",
+                "solarType": "all",
+                "solarEvents": "sunrise,sunset"
+            }
+        ],
+        "x": 330,
+        "y": 140,
+        "wires": [
+            [
+                "76f22770a1ecdcc0"
+            ]
+        ]
+    },
+    {
+        "id": "76f22770a1ecdcc0",
+        "type": "change",
+        "z": "533485cf0576576b",
+        "name": "skip old",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "prices",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t    $old_count := ($millis() - payload.timestamp) / (1000 * 60 * 60) ~> $floor;\t    \t    {\t        \"timestamp\": payload.timestamp + 1000 * 60 * 60 * $old_count,\t        \"hourly\": payload.hourly[[$old_count..$old_count+$env(\"hours\")-1]]\t    }\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 140,
+        "wires": [
+            [
+                "3b969228671a588c",
+                "524537159b4aadd6"
+            ]
+        ]
+    },
+    {
+        "id": "12ce2dc844d9a47d",
+        "type": "change",
+        "z": "533485cf0576576b",
+        "name": "store",
+        "rules": [
+            {
+                "t": "set",
+                "p": "prices",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3b969228671a588c",
+        "type": "change",
+        "z": "533485cf0576576b",
+        "name": "energy",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "energy_plan",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "cum",
+                "pt": "msg",
+                "to": "cum",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "payload.hourly",
+                "pt": "msg",
+                "to": "(\t   $last := payload.timestamp - 60*60*1000 ~> $string;\t   $cum := [cum ~> $lookup($last), 0][0];\t\t   $N := $count(payload.hourly);\t   \t   $avg := payload.hourly ~> $average;\t   $cheaper := payload.hourly.($avg - $);\t   $k_power := $cheaper.($ - $cum / $N);\t   \t   ($k_power ~> $reduce(function($acc, $v){[$acc, $acc[-1] + $v]}, [$cum]))[[1..100]];\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 200,
+        "wires": [
+            [
+                "8dede9a82f425059"
+            ]
+        ]
+    },
+    {
+        "id": "df2488b7c762d11e",
+        "type": "inject",
+        "z": "533485cf0576576b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "prices",
+        "payloadType": "flow",
+        "x": 290,
+        "y": 200,
+        "wires": [
+            [
+                "76f22770a1ecdcc0"
+            ]
+        ]
+    },
+    {
+        "id": "524537159b4aadd6",
+        "type": "change",
+        "z": "533485cf0576576b",
+        "name": "status",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.hourly ? {\t   \"fill\": \"green\",\t   \"text\": (payload.hourly ~> $count ~> $string) & \" hours\"\t} : {\t   \"fill\": \"red\",\t   \"text\": \"No prices\"\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 730,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "645c244060a8ae8c",
+        "type": "change",
+        "z": "533485cf0576576b",
+        "name": "interpolate",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "energy",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "timestamp",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t   $elapsed := ($millis() - payload.timestamp) / (60*60*1000);\t   payload.hourly[0] * (1 - $elapsed) + payload.hourly[1] * $elapsed;\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8dede9a82f425059",
+        "type": "change",
+        "z": "533485cf0576576b",
+        "name": "store cum",
+        "rules": [
+            {
+                "t": "set",
+                "p": "cum",
+                "pt": "flow",
+                "to": "(\t   $last := payload.timestamp - 60*60*1000 ~> $string;\t   $curr := payload.timestamp ~> $string;\t   $cum := [cum ~> $lookup($last), 0][0];\t\t   {\t       $last: $cum,\t       $curr: payload.hourly[0]\t   }\t)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "delete",
+                "p": "cum",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 260,
+        "wires": [
+            [
+                "645c244060a8ae8c",
+                "6baa58c70ca86941"
+            ]
+        ]
+    },
+    {
+        "id": "6baa58c70ca86941",
+        "type": "debug",
+        "z": "533485cf0576576b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 730,
+        "y": 240,
+        "wires": []
     },
     {
         "id": "51498480.d6e76c",
@@ -1907,409 +2410,6 @@
         ]
     },
     {
-        "id": "8ff73cdf.9d592",
-        "type": "mqtt out",
-        "z": "c208375a.5070e8",
-        "name": "Request",
-        "topic": "",
-        "qos": "2",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "5269a148.9a1bd",
-        "x": 1100,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "9896f3fe.2bdf6",
-        "type": "ui_dropdown",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "label": "HW comfort",
-        "tooltip": "",
-        "place": "Select mode",
-        "group": "575ff406.b304bc",
-        "order": 10,
-        "width": 3,
-        "height": 1,
-        "passthru": false,
-        "multiple": false,
-        "options": [
-            {
-                "label": "",
-                "value": "ECONOMY",
-                "type": "str"
-            },
-            {
-                "label": "",
-                "value": "NORMAL",
-                "type": "str"
-            },
-            {
-                "label": "",
-                "value": "LUXURY",
-                "type": "str"
-            }
-        ],
-        "payload": "",
-        "topic": "nibe/req/hot-water-comfort-mode-47041",
-        "topicType": "str",
-        "className": "",
-        "x": 710,
-        "y": 480,
-        "wires": [
-            [
-                "feebe97972be8a4c"
-            ]
-        ]
-    },
-    {
-        "id": "9ac15de542669da2",
-        "type": "debug",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 530,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "19fcd76654092d74",
-        "type": "ui_chart",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "group": "575ff406.b304bc",
-        "order": 17,
-        "width": 0,
-        "height": 0,
-        "label": "Controll",
-        "chartType": "line",
-        "legend": "true",
-        "xformat": "dd HH",
-        "interpolate": "step",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": "3",
-        "removeOlderPoints": "",
-        "removeOlderUnit": "86400",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 880,
-        "y": 260,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "1410e6cac9159e0a",
-        "type": "nordpool-api",
-        "z": "c208375a.5070e8",
-        "area": "SE3",
-        "currency": "SEK",
-        "timeSpan": "hourly",
-        "x": 300,
-        "y": 80,
-        "wires": [
-            [
-                "8d107d2afb6f87e4"
-            ]
-        ]
-    },
-    {
-        "id": "2840a592bdecb9e2",
-        "type": "ui_chart",
-        "z": "c208375a.5070e8",
-        "name": "Strategy",
-        "group": "575ff406.b304bc",
-        "order": 16,
-        "width": 0,
-        "height": 0,
-        "label": "Strategy",
-        "chartType": "line",
-        "legend": "true",
-        "xformat": "HH",
-        "interpolate": "step",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": "24",
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 880,
-        "y": 300,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "81d3dc3321fa6540",
-        "type": "function",
-        "z": "c208375a.5070e8",
-        "name": "Adapt to price",
-        "func": "const LOOK_AHEAD = 10;\n\nfunction sum(y, x) {\n    return y + x;\n}\n\nfunction add_hours(date, hours) {\n    return new Date(\n        date.getFullYear(),\n        date.getMonth(),\n        date.getDate(),\n        date.getHours() + hours\n    );\n}\n\nfunction date_id(date) {\n    return [\n        date.getFullYear(),\n        date.getMonth() + 1,\n        date.getDate(),\n        date.getHours()\n    ];\n}\n\nconst trigger = add_hours(new Date(), 0);\n\nconst by_date = {};\nfor (const item of flow.get(\"nordpool\")) {\n    by_date[date_id(new Date(item.Timestamp))] = item.Price / 1000;\n}\n\nconst prices = [];\nfor (let i = 0; i < LOOK_AHEAD; i++) {\n    const id = date_id(add_hours(trigger, i));\n    if (id in by_date) {\n        prices[i] = by_date[id];\n    }\n}\n\nlet heating_cum_last;\nconst heating_cum_old = context.get(\"heating_cum\");\nif (heating_cum_old) {\n    heating_cum_last = heating_cum_old[date_id(add_hours(trigger, -1))] || 0;\n} else {\n    heating_cum_last = 0;\n}\n\nconst decrement_price = flow.get(\"decrement_price\") || 1.0;\n\nlet heating = prices.map((p) => {return p * -1 / decrement_price});\n\nconst heating_cum = heating.reduce(sum, heating_cum_last);\n\nheating = heating.map(h => {\n    return h - heating_cum / heating.length;\n});\n\nconst heating_now = Math.round(heating[0]);\nconst heating_cum_now = heating_cum_last + heating_now;\nlet heating_cum_new = {};\nheating_cum_new[date_id(add_hours(trigger, -1))] = heating_cum_last;\nheating_cum_new[date_id(trigger)] = heating_cum_now;\n\ncontext.set(\"heating_cum\", heating_cum_new);\n\nnode.warn({\n    heating: heating,\n    prices: prices,\n    heating_now: heating_now\n});\n\nmessages = [];\n\nconst timestamp = trigger.getTime();\n\nmessages[0] = {\n    topic: \"price\",\n    timestamp: timestamp,\n    payload: prices[0]\n};\n\nmessages[1] = {\n    topic: \"heating\",\n    timestamp: timestamp,\n    payload: heating_now\n};\n\nmessages[2] = {\n    topic: \"strategy\",\n    payload: [{\n        \"series\": [\"price\", \"heating\"],\n        \"data\": [\n            prices.map((p, i) => {\n                return {\n                    x: add_hours(trigger, i).getTime(),\n                    y: p\n                };\n            }),\n            heating.map((h, i) => {\n                return {\n                    x: add_hours(trigger, i).getTime(),\n                    y: h\n                };\n            })\n        ],\n        \"labels\": [\"\"]\n    }]\n};\n\nreturn messages;\n",
-        "outputs": 3,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 320,
-        "y": 280,
-        "wires": [
-            [
-                "9ac15de542669da2",
-                "19fcd76654092d74"
-            ],
-            [
-                "9ac15de542669da2",
-                "19fcd76654092d74",
-                "304da7438b100a1e"
-            ],
-            [
-                "2840a592bdecb9e2"
-            ]
-        ],
-        "outputLabels": [
-            "price",
-            "heating",
-            "strategy chart"
-        ]
-    },
-    {
-        "id": "e1b36eaed74f4c08",
-        "type": "cronplus",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "outputField": "cron",
-        "timeZone": "",
-        "persistDynamic": false,
-        "commandResponseMsgOutput": "output1",
-        "outputs": 1,
-        "options": [
-            {
-                "name": "Hourly update",
-                "topic": "hours",
-                "payloadType": "default",
-                "payload": "",
-                "expressionType": "cron",
-                "expression": "0 0 * * * *",
-                "location": "",
-                "offset": "0",
-                "solarType": "all",
-                "solarEvents": "sunrise,sunset"
-            }
-        ],
-        "x": 120,
-        "y": 280,
-        "wires": [
-            [
-                "81d3dc3321fa6540"
-            ]
-        ]
-    },
-    {
-        "id": "d741a0dec42a57a6",
-        "type": "inject",
-        "z": "c208375a.5070e8",
-        "name": "At 14:50",
-        "props": [],
-        "repeat": "",
-        "crontab": "50 15 * * *",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 120,
-        "y": 80,
-        "wires": [
-            [
-                "1410e6cac9159e0a"
-            ]
-        ]
-    },
-    {
-        "id": "8d107d2afb6f87e4",
-        "type": "change",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "nordpool",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 550,
-        "y": 80,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "b0d7b798e4675910",
-        "type": "ui_slider",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "label": "Decrement price",
-        "tooltip": "",
-        "group": "575ff406.b304bc",
-        "order": 2,
-        "width": 0,
-        "height": 0,
-        "passthru": true,
-        "outs": "end",
-        "topic": "decrement_price",
-        "topicType": "str",
-        "min": "0.2",
-        "max": "2",
-        "step": "0.1",
-        "className": "",
-        "x": 360,
-        "y": 180,
-        "wires": [
-            [
-                "c5b8db39c10d1e36"
-            ]
-        ]
-    },
-    {
-        "id": "c5b8db39c10d1e36",
-        "type": "change",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "decrement_price",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 590,
-        "y": 180,
-        "wires": [
-            [
-                "81d3dc3321fa6540"
-            ]
-        ]
-    },
-    {
-        "id": "01b63d07449909ad",
-        "type": "inject",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "decrement_price",
-        "payloadType": "flow",
-        "x": 160,
-        "y": 180,
-        "wires": [
-            [
-                "b0d7b798e4675910"
-            ]
-        ]
-    },
-    {
-        "id": "304da7438b100a1e",
-        "type": "change",
-        "z": "c208375a.5070e8",
-        "name": "nibe/req/heat-offset-s1-47011",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "nibe/req/heat-offset-s1-47011",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "payload + $flowContext(\"heating_offset\")",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 940,
-        "y": 340,
-        "wires": [
-            [
-                "211b90755c10a0dd"
-            ]
-        ]
-    },
-    {
         "id": "9e62c82103ac3fda",
         "type": "ui_slider",
         "z": "c208375a.5070e8",
@@ -2320,7 +2420,7 @@
         "order": 1,
         "width": 0,
         "height": 0,
-        "passthru": true,
+        "passthru": false,
         "outs": "end",
         "topic": "offset",
         "topicType": "str",
@@ -2328,79 +2428,12 @@
         "max": "10",
         "step": 1,
         "className": "",
-        "x": 360,
-        "y": 380,
+        "x": 320,
+        "y": 1540,
         "wires": [
             [
-                "c4d3a8945d32a938"
-            ]
-        ]
-    },
-    {
-        "id": "618cc61d016ba359",
-        "type": "debug",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1170,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "c4d3a8945d32a938",
-        "type": "change",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "heating_offset",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 580,
-        "y": 380,
-        "wires": [
-            [
-                "81d3dc3321fa6540"
-            ]
-        ]
-    },
-    {
-        "id": "41af33a06e32f231",
-        "type": "inject",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "heating_offset",
-        "payloadType": "flow",
-        "x": 150,
-        "y": 380,
-        "wires": [
-            [
-                "9e62c82103ac3fda"
+                "c7f18eb851d2f047",
+                "bd9a8bd4ef680297"
             ]
         ]
     },
@@ -2597,11 +2630,11 @@
         "syntax": "mustache",
         "template": "\"{{payload}}\"",
         "output": "str",
-        "x": 870,
-        "y": 480,
+        "x": 1430,
+        "y": 1040,
         "wires": [
             [
-                "8ff73cdf.9d592"
+                "d1b18f58895b6a41"
             ]
         ]
     },
@@ -2749,27 +2782,9 @@
         "y": 680,
         "wires": [
             [
-                "6d9e4204cda075ab",
                 "412f64e445aacf73"
             ]
         ]
-    },
-    {
-        "id": "6d9e4204cda075ab",
-        "type": "debug",
-        "z": "c208375a.5070e8",
-        "name": "Enum",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 930,
-        "y": 720,
-        "wires": []
     },
     {
         "id": "848bc62551abda39",
@@ -2906,7 +2921,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "{\"eb100-ep14-pca-base-relays-43514\":\"\",\"mixing-valve-state-s1-43096\":\"\",\"start-temperature-hw-normal-47044\":\"\",\"stop-temperature-hw-normal-47048\":\"\",\"pca-power-relays-ep14-43516\":\"\",\"start-temperature-hw-luxury-47043\":\"\",\"stop-temperature-hw-luxury-47047\":\"\"}",
+        "payload": "{\"start-temperature-hw-normal-47044\":\"\",\"stop-temperature-hw-normal-47048\":\"\"}",
         "payloadType": "json",
         "x": 120,
         "y": 480,
@@ -2945,7 +2960,7 @@
                 "t": "set",
                 "p": "topic",
                 "pt": "msg",
-                "to": "\"nibe/req/\" & $.topic",
+                "to": "\"nibe/req/\" & topic",
                 "tot": "jsonata"
             }
         ],
@@ -2954,12 +2969,12 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 370,
+        "x": 390,
         "y": 480,
         "wires": [
             [
-                "8ff73cdf.9d592",
-                "41e35f1178540427"
+                "41e35f1178540427",
+                "1e1405533b7a467f"
             ]
         ]
     },
@@ -2994,8 +3009,7 @@
         "y": 640,
         "wires": [
             [
-                "90c3b718198c83b0",
-                "412f64e445aacf73"
+                "90c3b718198c83b0"
             ]
         ]
     },
@@ -3017,27 +3031,6 @@
         "wires": []
     },
     {
-        "id": "211b90755c10a0dd",
-        "type": "range",
-        "z": "c208375a.5070e8",
-        "minin": "-10",
-        "maxin": "10",
-        "minout": "-10",
-        "maxout": "10",
-        "action": "clamp",
-        "round": false,
-        "property": "payload",
-        "name": "[-10, 10]",
-        "x": 1140,
-        "y": 340,
-        "wires": [
-            [
-                "618cc61d016ba359",
-                "8ff73cdf.9d592"
-            ]
-        ]
-    },
-    {
         "id": "df8df027b6e56452",
         "type": "ui_text",
         "z": "c208375a.5070e8",
@@ -3050,8 +3043,8 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "className": "",
-        "x": 850,
-        "y": 560,
+        "x": 970,
+        "y": 1100,
         "wires": []
     },
     {
@@ -3072,13 +3065,13 @@
         "icon": "",
         "payload": "1",
         "payloadType": "num",
-        "topic": "nibe/req/alarm-reset-45171",
+        "topic": "alarm-reset-45171",
         "topicType": "str",
-        "x": 990,
-        "y": 540,
+        "x": 1110,
+        "y": 1080,
         "wires": [
             [
-                "8ff73cdf.9d592"
+                "d1b18f58895b6a41"
             ]
         ]
     },
@@ -3101,8 +3094,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 730,
-        "y": 540,
+        "x": 850,
+        "y": 1080,
         "wires": [
             [
                 "df8df027b6e56452",
@@ -3290,10 +3283,10 @@
                 "73cf57dc627f040e"
             ],
             [
-                "9896f3fe.2bdf6"
+                "6efd76303e42fa19"
             ],
             [
-                "4c76f279055c66c8"
+                "b7ba6a7cbbd25d05"
             ],
             [
                 "1c8a16f8277c5750"
@@ -3380,8 +3373,8 @@
         "order": 9,
         "width": 3,
         "height": 1,
-        "passthru": true,
-        "decouple": "false",
+        "passthru": false,
+        "decouple": "true",
         "topic": "topic",
         "topicType": "msg",
         "style": "",
@@ -3395,10 +3388,12 @@
         "offcolor": "",
         "animate": false,
         "className": "",
-        "x": 780,
-        "y": 720,
+        "x": 1080,
+        "y": 800,
         "wires": [
-            []
+            [
+                "2f37721255d2e8f2"
+            ]
         ]
     },
     {
@@ -3579,11 +3574,615 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 860,
-        "y": 520,
+        "x": 980,
+        "y": 1060,
         "wires": [
             [
                 "870d4d78d092230b"
+            ]
+        ]
+    },
+    {
+        "id": "b7ba6a7cbbd25d05",
+        "type": "change",
+        "z": "c208375a.5070e8",
+        "name": "to bool",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "OFF",
+                "fromt": "str",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "ON",
+                "fromt": "str",
+                "to": "true",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 950,
+        "y": 800,
+        "wires": [
+            [
+                "4c76f279055c66c8"
+            ]
+        ]
+    },
+    {
+        "id": "2f37721255d2e8f2",
+        "type": "change",
+        "z": "c208375a.5070e8",
+        "name": "from bool",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "false",
+                "fromt": "bool",
+                "to": "OFF",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "true",
+                "fromt": "bool",
+                "to": "ON",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1220,
+        "y": 800,
+        "wires": [
+            [
+                "feebe97972be8a4c"
+            ]
+        ]
+    },
+    {
+        "id": "d1b18f58895b6a41",
+        "type": "change",
+        "z": "c208375a.5070e8",
+        "name": "nibe/req/",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "\"nibe/req/\" & topic",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1420,
+        "y": 1100,
+        "wires": [
+            [
+                "e2de8193f915228c"
+            ]
+        ]
+    },
+    {
+        "id": "27d9460de124a7c6",
+        "type": "subflow:533485cf0576576b",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "x": 160,
+        "y": 1080,
+        "wires": [
+            [
+                "659362be944be751"
+            ],
+            [
+                "659362be944be751"
+            ],
+            [
+                "289ef5ee20e6bcc6",
+                "bd9a8bd4ef680297"
+            ]
+        ]
+    },
+    {
+        "id": "2b2fb66736684b3c",
+        "type": "change",
+        "z": "c208375a.5070e8",
+        "name": "chart",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "[\t    {\t        \"series\": $keys(payload),\t        \"data\"[0]: [\t            payload.*.[\t                hourly#$i.(\t                    {\t                        \"x\": %.timestamp + $i * 1000 * 60 * 60,\t                        \"y\": $\t                    }\t                )\t            ]\t        ],\t        \"labels\": [\"\"]\t    }\t]",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 510,
+        "y": 1040,
+        "wires": [
+            [
+                "60edc17daccb7545"
+            ]
+        ]
+    },
+    {
+        "id": "60edc17daccb7545",
+        "type": "ui_chart",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "group": "575ff406.b304bc",
+        "order": 15,
+        "width": 0,
+        "height": 0,
+        "label": "Plan",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "604800",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 630,
+        "y": 1040,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f17442d472fbce27",
+        "type": "inject",
+        "z": "c208375a.5070e8",
+        "name": "download",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 140,
+        "y": 1020,
+        "wires": [
+            [
+                "27d9460de124a7c6"
+            ]
+        ]
+    },
+    {
+        "id": "b3b5189fe827708c",
+        "type": "ui_slider",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "label": "HW / 100 €/MWh",
+        "tooltip": "HW temp per 100 €/MWh",
+        "group": "575ff406.b304bc",
+        "order": 12,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "hw_per_100",
+        "topicType": "str",
+        "min": 0,
+        "max": "40",
+        "step": "0.1",
+        "className": "",
+        "x": 330,
+        "y": 1300,
+        "wires": [
+            [
+                "289ef5ee20e6bcc6",
+                "8e43b8f6adf94f13"
+            ]
+        ]
+    },
+    {
+        "id": "289ef5ee20e6bcc6",
+        "type": "join",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 610,
+        "y": 1260,
+        "wires": [
+            [
+                "1b35871134d46cf1"
+            ]
+        ]
+    },
+    {
+        "id": "875c1c04eb550b74",
+        "type": "ui_slider",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "label": "Steps / 100 €/MWh",
+        "tooltip": "How many steps to increment the heating offset per 100 €/MWh",
+        "group": "575ff406.b304bc",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "steps_per_100",
+        "topicType": "str",
+        "min": 0,
+        "max": "5",
+        "step": "0.1",
+        "className": "",
+        "x": 330,
+        "y": 1340,
+        "wires": [
+            [
+                "d12f861f39285585",
+                "bd9a8bd4ef680297"
+            ]
+        ]
+    },
+    {
+        "id": "1b35871134d46cf1",
+        "type": "change",
+        "z": "c208375a.5070e8",
+        "name": "stop-temperature-hw-normal-47048",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "stop-temperature-hw-normal-47048",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t   $hw_max := 58;\t   $hw_min := 20;\t   $hw := $hw_max + payload.energy/100 * payload.hw_per_100;\t   $hw > $hw_max ? $hw_max : $hw < $hw_min ? $hw_min : $hw ~> $round(1);\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 840,
+        "y": 1260,
+        "wires": [
+            [
+                "85b46e908a61f36a",
+                "d1b18f58895b6a41"
+            ]
+        ]
+    },
+    {
+        "id": "85b46e908a61f36a",
+        "type": "change",
+        "z": "c208375a.5070e8",
+        "name": "start-temperature-hw-normal-47044",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "start-temperature-hw-normal-47044",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload - 6",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 840,
+        "y": 1300,
+        "wires": [
+            [
+                "d1b18f58895b6a41"
+            ]
+        ]
+    },
+    {
+        "id": "e2de8193f915228c",
+        "type": "mqtt out",
+        "z": "c208375a.5070e8",
+        "name": "Request",
+        "topic": "",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5269a148.9a1bd",
+        "x": 1420,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "659362be944be751",
+        "type": "join",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 370,
+        "y": 1040,
+        "wires": [
+            [
+                "2b2fb66736684b3c"
+            ]
+        ]
+    },
+    {
+        "id": "99a363b79d8a099f",
+        "type": "inject",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"payload\":[{\"series\":[\"prices\",\"energy_plan\"],\"data\":[[[{\"x\":1669248000000,\"y\":124.31},{\"x\":1669251600000,\"y\":121.92},{\"x\":1669255200000,\"y\":117.49},{\"x\":1669258800000,\"y\":125.92},{\"x\":1669262400000,\"y\":149.88},{\"x\":1669266000000,\"y\":207.39},{\"x\":1669269600000,\"y\":293.16},{\"x\":1669273200000,\"y\":309.09},{\"x\":1669276800000,\"y\":294.94},{\"x\":1669280400000,\"y\":295.02},{\"x\":1669284000000,\"y\":289.9},{\"x\":1669287600000,\"y\":272.93}],[{\"x\":1669248000000,\"y\":92.51916666666665},{\"x\":1669251600000,\"y\":187.42833333333328},{\"x\":1669255200000,\"y\":286.7674999999999},{\"x\":1669258800000,\"y\":377.67666666666656},{\"x\":1669262400000,\"y\":444.6258333333332},{\"x\":1669266000000,\"y\":454.0649999999999},{\"x\":1669269600000,\"y\":377.7341666666665},{\"x\":1669273200000,\"y\":285.4733333333332},{\"x\":1669276800000,\"y\":207.36249999999984},{\"x\":1669280400000,\"y\":129.1716666666665},{\"x\":1669284000000,\"y\":56.100833333333185},{\"x\":1669287600000,\"y\":-1.7053025658242404e-13}]]],\"labels\":[\"\"]}],\"_msgid\":\"7d8ea4cf5b22eab4\",\"topic\":\"energy_plan\",\"cum\":{\"1669247996400\":0,\"1669248000000\":92.51916666666665}}",
+        "payloadType": "json",
+        "x": 570,
+        "y": 1000,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8e43b8f6adf94f13",
+        "type": "subflow:8a783104762ea0c8",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "x": 130,
+        "y": 1260,
+        "wires": [
+            [
+                "b3b5189fe827708c",
+                "289ef5ee20e6bcc6"
+            ]
+        ]
+    },
+    {
+        "id": "d12f861f39285585",
+        "type": "subflow:8a783104762ea0c8",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "x": 130,
+        "y": 1380,
+        "wires": [
+            [
+                "875c1c04eb550b74",
+                "bd9a8bd4ef680297"
+            ]
+        ]
+    },
+    {
+        "id": "bd9a8bd4ef680297",
+        "type": "join",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 610,
+        "y": 1440,
+        "wires": [
+            [
+                "8a72e79adb8871d4"
+            ]
+        ]
+    },
+    {
+        "id": "8a72e79adb8871d4",
+        "type": "change",
+        "z": "c208375a.5070e8",
+        "name": "heat-offset-s1-47011",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "heat-offset-s1-47011",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t    $offset := payload.offset + payload.energy/100 * payload.steps_per_100;\t    $offset > 10 ? 10 : $offset < -10 ? -10 : $offset ~> $round\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 1440,
+        "wires": [
+            [
+                "d1b18f58895b6a41"
+            ]
+        ]
+    },
+    {
+        "id": "1e1405533b7a467f",
+        "type": "mqtt out",
+        "z": "c208375a.5070e8",
+        "name": "Request",
+        "topic": "",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5269a148.9a1bd",
+        "x": 560,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "6efd76303e42fa19",
+        "type": "ui_dropdown",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "label": "HW comfort",
+        "tooltip": "",
+        "place": "Select mode",
+        "group": "575ff406.b304bc",
+        "order": 10,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "multiple": false,
+        "options": [
+            {
+                "label": "",
+                "value": "ECONOMY",
+                "type": "str"
+            },
+            {
+                "label": "",
+                "value": "NORMAL",
+                "type": "str"
+            },
+            {
+                "label": "",
+                "value": "LUXURY",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "hot-water-comfort-mode-47041",
+        "topicType": "str",
+        "className": "",
+        "x": 970,
+        "y": 980,
+        "wires": [
+            [
+                "feebe97972be8a4c"
+            ]
+        ]
+    },
+    {
+        "id": "c7f18eb851d2f047",
+        "type": "subflow:8a783104762ea0c8",
+        "z": "c208375a.5070e8",
+        "name": "",
+        "x": 130,
+        "y": 1500,
+        "wires": [
+            [
+                "9e62c82103ac3fda",
+                "bd9a8bd4ef680297"
             ]
         ]
     },
@@ -3832,711 +4431,5 @@
                 "7f670ec81b77872a"
             ]
         ]
-    },
-    {
-        "id": "3fcb65cf95b0c397",
-        "type": "subflow:b9647c4eba6ade67",
-        "z": "35da2bd8d0ae95d8",
-        "name": "SE3",
-        "env": [
-            {
-                "name": "securityToken",
-                "type": "cred"
-            }
-        ],
-        "x": 270,
-        "y": 80,
-        "wires": [
-            [
-                "0f65211f91a57ddc",
-                "e9ad732d1fbb19e4"
-            ]
-        ]
-    },
-    {
-        "id": "f37cafd40a4bb6d1",
-        "type": "inject",
-        "z": "35da2bd8d0ae95d8",
-        "name": "Daily",
-        "props": [],
-        "repeat": "",
-        "crontab": "50 13 * * *",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 150,
-        "y": 80,
-        "wires": [
-            [
-                "3fcb65cf95b0c397"
-            ]
-        ]
-    },
-    {
-        "id": "0a26e168e8782608",
-        "type": "debug",
-        "z": "35da2bd8d0ae95d8",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 650,
-        "y": 20,
-        "wires": []
-    },
-    {
-        "id": "575c3be5d46c3846",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "heat offset",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "offset",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "timestamp",
-                "pt": "msg",
-                "to": "payload.prices.timestamp",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "(\t   $last := payload.prices.timestamp - 60*60 ~> $string;\t  \t   $hc_last := [$flowContext(\"heating_cum\") ~> $lookup($last), 0][0];\t\t   $avg := payload.prices.hourly ~> $average;\t   $cheaper := $avg - payload.prices.hourly[0];\t   \t   $cheaper/100 * payload.steps_per_100 - $hc_last / $count(payload.prices.hourly) ~> $round\t)",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 810,
-        "y": 140,
-        "wires": [
-            [
-                "b088a23c5fedb67a"
-            ]
-        ]
-    },
-    {
-        "id": "b088a23c5fedb67a",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "store heating_cum",
-        "rules": [
-            {
-                "t": "set",
-                "p": "heating_cum",
-                "pt": "flow",
-                "to": "(\t   $last := timestamp - 60*60 ~> $string;\t   $curr := timestamp ~> $string;\t   $hc_last := [$flowContext(\"heating_cum\") ~> $lookup($last), 0][0];\t\t   {\t       $last: $hc_last,\t       $curr: $hc_last + payload\t   }\t)",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1010,
-        "y": 140,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "1b05f2ac96cb7a44",
-        "type": "inject",
-        "z": "35da2bd8d0ae95d8",
-        "name": "",
-        "props": [
-            {
-                "p": "topic",
-                "vt": "str"
-            },
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "steps_per_100",
-        "payload": "steps_per_100",
-        "payloadType": "flow",
-        "x": 190,
-        "y": 260,
-        "wires": [
-            [
-                "60f6c9b7e94a9f7b",
-                "65a20a67e0976ea8"
-            ]
-        ]
-    },
-    {
-        "id": "89ff19f19e9b8e62",
-        "type": "join",
-        "z": "35da2bd8d0ae95d8",
-        "name": "",
-        "mode": "custom",
-        "build": "object",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": true,
-        "timeout": "",
-        "count": "2",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 650,
-        "y": 140,
-        "wires": [
-            [
-                "575c3be5d46c3846"
-            ]
-        ]
-    },
-    {
-        "id": "60f6c9b7e94a9f7b",
-        "type": "ui_slider",
-        "z": "35da2bd8d0ae95d8",
-        "name": "",
-        "label": "Steps / 100 €/MWh",
-        "tooltip": "How many steps to increment the heating offset per 100 €/MWh",
-        "group": "575ff406.b304bc",
-        "order": 11,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "outs": "end",
-        "topic": "topic",
-        "topicType": "msg",
-        "min": 0,
-        "max": "5",
-        "step": "0.1",
-        "className": "",
-        "x": 190,
-        "y": 220,
-        "wires": [
-            [
-                "65a20a67e0976ea8"
-            ]
-        ]
-    },
-    {
-        "id": "65a20a67e0976ea8",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "store",
-        "rules": [
-            {
-                "t": "set",
-                "p": "steps_per_100",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 390,
-        "y": 220,
-        "wires": [
-            [
-                "89ff19f19e9b8e62"
-            ]
-        ]
-    },
-    {
-        "id": "daf43b03f380c376",
-        "type": "cronplus",
-        "z": "35da2bd8d0ae95d8",
-        "name": "hourly price adjustment",
-        "outputField": "payload",
-        "timeZone": "",
-        "persistDynamic": false,
-        "commandResponseMsgOutput": "output1",
-        "outputs": 1,
-        "options": [
-            {
-                "name": "hourly price adjustment",
-                "topic": "prices",
-                "payloadType": "flow",
-                "payload": "prices",
-                "expressionType": "cron",
-                "expression": "0 0 * * * * *",
-                "location": "",
-                "offset": "0",
-                "solarType": "all",
-                "solarEvents": "sunrise,sunset"
-            }
-        ],
-        "x": 210,
-        "y": 140,
-        "wires": [
-            [
-                "e9ad732d1fbb19e4"
-            ]
-        ]
-    },
-    {
-        "id": "e9ad732d1fbb19e4",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "skip old",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "(\t    $old_count := ($millis() - payload.timestamp) / (1000 * 60 * 60) ~> $floor;\t    \t    {\t        \"timestamp\": payload.timestamp + 1000 * 60 * 60 * $old_count,\t        \"hourly\": payload.hourly[[$old_count..$old_count+12-1]]\t    }\t)",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 460,
-        "y": 140,
-        "wires": [
-            [
-                "89ff19f19e9b8e62",
-                "0a26e168e8782608",
-                "27bf12619bf6cc84",
-                "1da15f822e055aed"
-            ]
-        ]
-    },
-    {
-        "id": "0f65211f91a57ddc",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "store",
-        "rules": [
-            {
-                "t": "set",
-                "p": "prices",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 430,
-        "y": 80,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "7a905c3f984bb39a",
-        "type": "inject",
-        "z": "35da2bd8d0ae95d8",
-        "name": "",
-        "props": [
-            {
-                "p": "topic",
-                "vt": "str"
-            },
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "heating_cum",
-        "payload": "{\"1668977996400\":-6,\"1668978000000\":1}",
-        "payloadType": "json",
-        "x": 990,
-        "y": 180,
-        "wires": [
-            [
-                "3d69fcefb6a790e9"
-            ]
-        ]
-    },
-    {
-        "id": "3d69fcefb6a790e9",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "heating_cum",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1160,
-        "y": 180,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "27bf12619bf6cc84",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "chart",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "price",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "[\t   {\t       \"series\": [\"price €/MWh\"],\t       \"data\"[0]: [\t           [\t               payload.hourly#$i.(\t                   {\t                       \"x\": $$.payload.timestamp + $i * 1000 * 60 * 60,\t                       \"y\": $\t                   }\t               )\t           ]\t       ],\t       \"labels\": [\"\"]\t    }\t]",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 650,
-        "y": 80,
-        "wires": [
-            [
-                "2253f7c2e84f58d0"
-            ]
-        ]
-    },
-    {
-        "id": "2253f7c2e84f58d0",
-        "type": "ui_chart",
-        "z": "35da2bd8d0ae95d8",
-        "name": "",
-        "group": "575ff406.b304bc",
-        "order": 15,
-        "width": 0,
-        "height": 0,
-        "label": "prices",
-        "chartType": "line",
-        "legend": "false",
-        "xformat": "dd HH:mm",
-        "interpolate": "step",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "604800",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 790,
-        "y": 80,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "e3b585bd69e027b2",
-        "type": "inject",
-        "z": "35da2bd8d0ae95d8",
-        "name": "",
-        "props": [
-            {
-                "p": "topic",
-                "vt": "str"
-            },
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "hw_per_100",
-        "payload": "hw_per_100",
-        "payloadType": "flow",
-        "x": 190,
-        "y": 360,
-        "wires": [
-            [
-                "67270e38c6e063df",
-                "87b3b510a0b58cb7"
-            ]
-        ]
-    },
-    {
-        "id": "67270e38c6e063df",
-        "type": "ui_slider",
-        "z": "35da2bd8d0ae95d8",
-        "name": "",
-        "label": "HW / 100 €/MWh",
-        "tooltip": "HW temp per 100 €/MWh",
-        "group": "575ff406.b304bc",
-        "order": 12,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "outs": "end",
-        "topic": "topic",
-        "topicType": "msg",
-        "min": 0,
-        "max": "40",
-        "step": "0.1",
-        "className": "",
-        "x": 190,
-        "y": 320,
-        "wires": [
-            [
-                "87b3b510a0b58cb7"
-            ]
-        ]
-    },
-    {
-        "id": "87b3b510a0b58cb7",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "store",
-        "rules": [
-            {
-                "t": "set",
-                "p": "hw_per_100",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 390,
-        "y": 320,
-        "wires": [
-            [
-                "1da15f822e055aed"
-            ]
-        ]
-    },
-    {
-        "id": "93bf37f3b9f73b45",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "heat offset",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "offset",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "timestamp",
-                "pt": "msg",
-                "to": "payload.prices.timestamp",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "(\t   $avg := payload.prices.hourly ~> $average;\t   $cheaper := $avg - payload.prices.hourly[0];\t   \t   $cheaper/100 * payload.hw_per_100\t)",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 810,
-        "y": 320,
-        "wires": [
-            [
-                "7d329308cdf246a3"
-            ]
-        ]
-    },
-    {
-        "id": "1da15f822e055aed",
-        "type": "join",
-        "z": "35da2bd8d0ae95d8",
-        "name": "",
-        "mode": "custom",
-        "build": "object",
-        "property": "payload",
-        "propertyType": "msg",
-        "key": "topic",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "accumulate": true,
-        "timeout": "",
-        "count": "2",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 650,
-        "y": 320,
-        "wires": [
-            [
-                "93bf37f3b9f73b45"
-            ]
-        ]
-    },
-    {
-        "id": "7d329308cdf246a3",
-        "type": "range",
-        "z": "35da2bd8d0ae95d8",
-        "minin": "-30",
-        "maxin": "10",
-        "minout": "18",
-        "maxout": "58",
-        "action": "clamp",
-        "round": false,
-        "property": "payload",
-        "name": "Adjust around 48℃",
-        "x": 1010,
-        "y": 320,
-        "wires": [
-            [
-                "984a3689aba07c5d",
-                "eb5f9eb6c9308310"
-            ]
-        ]
-    },
-    {
-        "id": "984a3689aba07c5d",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "stop-temperature-hw-normal-47048",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "nibe/req/stop-temperature-hw-normal-47048",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1260,
-        "y": 300,
-        "wires": [
-            [
-                "34cb607fd2768f18"
-            ]
-        ]
-    },
-    {
-        "id": "eb5f9eb6c9308310",
-        "type": "change",
-        "z": "35da2bd8d0ae95d8",
-        "name": "start-temperature-hw-normal-47044",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "nibe/req/start-temperature-hw-normal-47044",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "payload - 6",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1260,
-        "y": 340,
-        "wires": [
-            [
-                "34cb607fd2768f18"
-            ]
-        ]
-    },
-    {
-        "id": "34cb607fd2768f18",
-        "type": "mqtt out",
-        "z": "35da2bd8d0ae95d8",
-        "name": "Request",
-        "topic": "",
-        "qos": "2",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "5269a148.9a1bd",
-        "x": 1500,
-        "y": 320,
-        "wires": []
     }
 ]
