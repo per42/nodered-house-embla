@@ -502,7 +502,7 @@
         "name": "Default",
         "tab": "8a6e351722202eee",
         "order": 1,
-        "disp": true,
+        "disp": false,
         "width": "6",
         "collapse": false,
         "className": ""
@@ -2774,41 +2774,13 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 120,
+        "x": 100,
         "y": 700,
         "wires": [
             [
-                "ee6287cffe879c20",
-                "8884c610cc61e319",
-                "d36ca71da27a6eb0"
+                "d36ca71da27a6eb0",
+                "d3e5625fe23d21fb"
             ]
-        ]
-    },
-    {
-        "id": "f08eb5d288fbbc81",
-        "type": "inject",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "props": [
-            {
-                "p": "topic",
-                "vt": "str"
-            },
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "nibe/data",
-        "payload": "{\"cpr-status-ep14-43435\":\"ON\",\"bt1-outdoor-temperature-40004\":12.4,\"hot-water-comfort-mode-47041\":\"ECONOMY\"}",
-        "payloadType": "json",
-        "x": 130,
-        "y": 760,
-        "wires": [
-            []
         ]
     },
     {
@@ -2841,8 +2813,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "topic",
-        "x": 450,
-        "y": 640,
+        "x": 410,
+        "y": 700,
         "wires": [
             [
                 "848bc62551abda39",
@@ -3474,7 +3446,7 @@
         "repair": false,
         "outputs": 12,
         "x": 590,
-        "y": 800,
+        "y": 840,
         "wires": [
             [
                 "73cf57dc627f040e"
@@ -3486,25 +3458,33 @@
                 "b7ba6a7cbbd25d05"
             ],
             [
-                "1c8a16f8277c5750"
+                "1c8a16f8277c5750",
+                "780a0b1c9dde01f2"
             ],
             [
-                "af9adb2e98732a78"
+                "af9adb2e98732a78",
+                "780a0b1c9dde01f2"
             ],
             [
-                "cecb45c66eb67803"
+                "cecb45c66eb67803",
+                "780a0b1c9dde01f2"
             ],
             [
-                "e51be9b743450e1e"
+                "e51be9b743450e1e",
+                "780a0b1c9dde01f2"
             ],
             [
-                "3d3761c47af65f24"
+                "3d3761c47af65f24",
+                "780a0b1c9dde01f2"
+            ],
+            [
+                "780a0b1c9dde01f2"
+            ],
+            [
+                "780a0b1c9dde01f2"
             ],
             [],
-            [],
-            [],
             [
-                "bc22ac66b7104c78",
                 "ca72f118646954fa"
             ]
         ]
@@ -3704,12 +3684,11 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 310,
-        "y": 740,
+        "x": 230,
+        "y": 820,
         "wires": [
             [
-                "e7270a8f70152445",
-                "d36ca71da27a6eb0"
+                "e7270a8f70152445"
             ]
         ]
     },
@@ -4281,33 +4260,6 @@
         ]
     },
     {
-        "id": "bc22ac66b7104c78",
-        "type": "switch",
-        "z": "c208375a.5070e8",
-        "name": "OFF?",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "OFF",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "false",
-        "repair": false,
-        "outputs": 2,
-        "x": 730,
-        "y": 720,
-        "wires": [
-            [],
-            []
-        ]
-    },
-    {
         "id": "1ed3afac1d8fe31d",
         "type": "trigger",
         "z": "c208375a.5070e8",
@@ -4378,11 +4330,12 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 920,
-        "y": 920,
+        "x": 760,
+        "y": 960,
         "wires": [
             [
-                "ebac11a7eb27272e"
+                "ebac11a7eb27272e",
+                "780a0b1c9dde01f2"
             ]
         ]
     },
@@ -4508,19 +4461,6 @@
         ]
     },
     {
-        "id": "f463d87b7d95de84",
-        "type": "subflow:ae1043509ce8d1dd",
-        "z": "c208375a.5070e8",
-        "name": "",
-        "x": 800,
-        "y": 1440,
-        "wires": [
-            [
-                "bd9a8bd4ef680297"
-            ]
-        ]
-    },
-    {
         "id": "d8a7133d496fb942",
         "type": "debug",
         "z": "c208375a.5070e8",
@@ -4635,9 +4575,9 @@
             },
             {
                 "t": "set",
-                "p": "payload.hourly",
+                "p": "payload",
                 "pt": "msg",
-                "to": "$zip(payload.hourly, payload.hourly[[1..100]]).($[1] - $[0])",
+                "to": "payload.hourly[1] - payload.hourly[0]",
                 "tot": "jsonata"
             }
         ],
@@ -4650,7 +4590,7 @@
         "y": 1440,
         "wires": [
             [
-                "f463d87b7d95de84"
+                "bd9a8bd4ef680297"
             ]
         ]
     },
@@ -4759,6 +4699,47 @@
         ]
     },
     {
+        "id": "780a0b1c9dde01f2",
+        "type": "link out",
+        "z": "c208375a.5070e8",
+        "name": "NIBE",
+        "mode": "link",
+        "links": [
+            "fb665bd72624d8d9"
+        ],
+        "x": 715,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "d3e5625fe23d21fb",
+        "type": "change",
+        "z": "c208375a.5070e8",
+        "name": "timestamp",
+        "rules": [
+            {
+                "t": "set",
+                "p": "timestamp",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 250,
+        "y": 700,
+        "wires": [
+            [
+                "8884c610cc61e319",
+                "ee6287cffe879c20"
+            ]
+        ]
+    },
+    {
         "id": "01b9879c351e54a1",
         "type": "subflow:b9647c4eba6ade67",
         "z": "0da30667a1d02274",
@@ -4855,7 +4836,7 @@
         "z": "0da30667a1d02274",
         "name": "",
         "group": "97de768a1828044e",
-        "order": 10,
+        "order": 3,
         "width": 0,
         "height": 0,
         "label": "prices",
@@ -4953,7 +4934,7 @@
         "templateScope": "global",
         "className": "",
         "x": 310,
-        "y": 420,
+        "y": 500,
         "wires": [
             []
         ]
@@ -4963,18 +4944,18 @@
         "type": "ui_template",
         "z": "1436d6b5cc05b82e",
         "group": "97de768a1828044e",
-        "name": "",
-        "order": 10,
-        "width": 0,
-        "height": 0,
-        "format": "<div id=\"myPlot\" style=\"width:306px\"></div>\n\n<script>\nvar xArray = [50,60,70,80,90,100,110,120,130,140,150];\nvar yArray = [7,8,8,9,9,9,10,11,14,14,15];\n\n// Define Data\nvar data = [{\n  x:xArray,\n  y:yArray\n}];\n\n// Define Layout\nvar layout = {\n  xaxis: {range: [40, 160], title: \"Square Meters\"},\n  yaxis: {range: [5, 16]},  \n  title: \"House Prices vs. Size\",\n  margin: {\n    l: 20,\n    r: 20,\n    t: 20,\n    b: 20,\n  }\n};\n\n// Display using Plotly\nPlotly.newPlot(\"myPlot\", data, layout);\n\nscope.$watch('msg', function(msg) {\n    console.log(\"data received: \" + JSON.stringify(msg));\n    console.log(JSON.stringify(graphDiv.data));\n    if (msg) {\n      var update = {\n            x: [msg.payload.x],\n            y: [msg.payload.y]\n      };\n      console.log(JSON.stringify(update));\n      Plotly.restyle(\"myPlot\", update);\n    }\n    console.log(JSON.stringify(graphDiv.data));\n  });\n</script>\n",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
+        "name": "myPlot",
+        "order": 2,
+        "width": 6,
+        "height": 9,
+        "format": "<div id=\"myPlot\" style=\"width:306px\"></div>\n\n<script>\n\nvar topics = [];\n\n// Define Layout\nvar layout = {\n//   xaxis: {range: [40, 160], title: \"Square Meters\"},\n//   yaxis: {range: [5, 16]},  \n//   title: \"House Prices vs. Size\",\n    showlegend: false,\n    xaxis: {\n        // tickformat: \"%a %H:%M\",\n        type: \"date\"\n    },\n    margin: {\n        l: 30,\n        r: 0,\n        t: 40,\n        b: 40,\n  }\n};\n\n// Display using Plotly\n// Plotly.newPlot(\"myPlot\", data, layout);\nPlotly.newPlot(\"myPlot\", [], layout);\n\nscope.$watch('msg', function(msg) {\n    console.log(\"data received: \" + JSON.stringify(msg));\n    if (msg) {\n        if (msg.graphs) {\n            const data = Object.entries(msg.graphs).map(kv => {\n                return {\n                    name: kv[0],\n                    x: kv[1].x,\n                    y: kv[1].y\n                };\n            });\n            Plotly.newPlot(\"myPlot\", data, layout);\n            topics = Object.keys(msg.graphs);\n        } else {\n            if (!topics.includes(msg.topic)) {\n                topics.push(msg.topic);\n                Plotly.addTraces(\"myPlot\", {\n                    name: msg.topic,\n                    x: [msg.timestamp],\n                    y: [msg.payload]\n                });\n            } else {\n                Plotly.extendTraces(\n                    \"myPlot\",\n                    {\n                        x: [[msg.timestamp]],\n                        y: [[msg.payload]]\n                    },\n                    [topics.indexOf(msg.topic)],\n                    msg.count||10\n                );\n            }\n        }\n    }\n});\n</script>\n",
+        "storeOutMessages": false,
+        "fwdInMessages": false,
+        "resendOnRefresh": false,
         "templateScope": "local",
         "className": "",
-        "x": 520,
-        "y": 420,
+        "x": 630,
+        "y": 380,
         "wires": [
             []
         ]
@@ -4994,10 +4975,183 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "{\"x\":[40,50,60],\"y\":[4,7,6]}",
+        "payload": "{\"x\":[160,170,180],\"y\":[4,7,6]}",
         "payloadType": "json",
         "x": 330,
         "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b233567917735588",
+        "type": "inject",
+        "z": "1436d6b5cc05b82e",
+        "name": "",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "timestamp",
+                "v": "",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "foo",
+        "x": 330,
+        "y": 320,
+        "wires": [
+            [
+                "8280ddc636d7e74c"
+            ]
+        ]
+    },
+    {
+        "id": "8280ddc636d7e74c",
+        "type": "random",
+        "z": "1436d6b5cc05b82e",
+        "name": "",
+        "low": 1,
+        "high": 10,
+        "inte": "false",
+        "property": "payload",
+        "x": 340,
+        "y": 360,
+        "wires": [
+            [
+                "7f670ec81b77872a"
+            ]
+        ]
+    },
+    {
+        "id": "297a80257e180cb1",
+        "type": "inject",
+        "z": "1436d6b5cc05b82e",
+        "name": "",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "timestamp",
+                "v": "",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "bar",
+        "x": 330,
+        "y": 400,
+        "wires": [
+            [
+                "8280ddc636d7e74c"
+            ]
+        ]
+    },
+    {
+        "id": "ee452c380adc3f3e",
+        "type": "change",
+        "z": "1436d6b5cc05b82e",
+        "name": "store",
+        "rules": [
+            {
+                "t": "set",
+                "p": "graphs",
+                "pt": "msg",
+                "to": "graphs",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "graphs",
+                "pt": "flow",
+                "to": "(\t    $o := graphs ~> $lookup(topic);\t    $merge([\t        graphs ~> $each(function($v, $k){{$k:$v}}),\t        {\t            topic: {\t                \"x\": [$o.x, timestamp][[-$$.count..-1]],\t                \"y\": [$o.y, payload][[-$$.count..-1]]\t            }\t        }\t    ])\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 790,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fb665bd72624d8d9",
+        "type": "link in",
+        "z": "1436d6b5cc05b82e",
+        "name": "plot",
+        "links": [
+            "780a0b1c9dde01f2"
+        ],
+        "x": 525,
+        "y": 280,
+        "wires": [
+            [
+                "42f4cb4cef029ada"
+            ]
+        ]
+    },
+    {
+        "id": "42f4cb4cef029ada",
+        "type": "change",
+        "z": "1436d6b5cc05b82e",
+        "name": "count",
+        "rules": [
+            {
+                "t": "set",
+                "p": "count",
+                "pt": "msg",
+                "to": "18000",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 280,
+        "wires": [
+            [
+                "7f670ec81b77872a"
+            ]
+        ]
+    },
+    {
+        "id": "5918e71b1cd98b15",
+        "type": "inject",
+        "z": "1436d6b5cc05b82e",
+        "name": "",
+        "props": [
+            {
+                "p": "graphs",
+                "v": "graphs",
+                "vt": "flow"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 330,
+        "y": 440,
         "wires": [
             [
                 "7f670ec81b77872a"
