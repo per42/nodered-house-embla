@@ -24,8 +24,8 @@
     {
         "id": "1436d6b5cc05b82e",
         "type": "tab",
-        "label": "Flow 2",
-        "disabled": false,
+        "label": "Plotly",
+        "disabled": true,
         "info": "",
         "env": []
     },
@@ -4334,8 +4334,7 @@
         "y": 960,
         "wires": [
             [
-                "ebac11a7eb27272e",
-                "780a0b1c9dde01f2"
+                "ebac11a7eb27272e"
             ]
         ]
     },
@@ -4707,8 +4706,8 @@
         "links": [
             "fb665bd72624d8d9"
         ],
-        "x": 715,
-        "y": 1020,
+        "x": 725,
+        "y": 1040,
         "wires": []
     },
     {
@@ -4948,16 +4947,18 @@
         "order": 2,
         "width": 6,
         "height": 9,
-        "format": "<div id=\"myPlot\" style=\"width:306px\"></div>\n\n<script>\n\nvar topics = [];\n\n// Define Layout\nvar layout = {\n//   xaxis: {range: [40, 160], title: \"Square Meters\"},\n//   yaxis: {range: [5, 16]},  \n//   title: \"House Prices vs. Size\",\n    showlegend: false,\n    xaxis: {\n        // tickformat: \"%a %H:%M\",\n        type: \"date\"\n    },\n    margin: {\n        l: 30,\n        r: 0,\n        t: 40,\n        b: 40,\n  }\n};\n\n// Display using Plotly\n// Plotly.newPlot(\"myPlot\", data, layout);\nPlotly.newPlot(\"myPlot\", [], layout);\n\nscope.$watch('msg', function(msg) {\n    console.log(\"data received: \" + JSON.stringify(msg));\n    if (msg) {\n        if (msg.graphs) {\n            const data = Object.entries(msg.graphs).map(kv => {\n                return {\n                    name: kv[0],\n                    x: kv[1].x,\n                    y: kv[1].y\n                };\n            });\n            Plotly.newPlot(\"myPlot\", data, layout);\n            topics = Object.keys(msg.graphs);\n        } else {\n            if (!topics.includes(msg.topic)) {\n                topics.push(msg.topic);\n                Plotly.addTraces(\"myPlot\", {\n                    name: msg.topic,\n                    x: [msg.timestamp],\n                    y: [msg.payload]\n                });\n            } else {\n                Plotly.extendTraces(\n                    \"myPlot\",\n                    {\n                        x: [[msg.timestamp]],\n                        y: [[msg.payload]]\n                    },\n                    [topics.indexOf(msg.topic)],\n                    msg.count||10\n                );\n            }\n        }\n    }\n});\n</script>\n",
+        "format": "<div id=\"myPlot\" style=\"width:306px\"></div>\n\n<script>\n\n\n// Define Layout\nvar layout = {\n//   xaxis: {range: [40, 160], title: \"Square Meters\"},\n//   yaxis: {range: [5, 16]},  \n//   title: \"House Prices vs. Size\",\n    showlegend: false,\n    xaxis: {\n        // tickformat: \"%a %H:%M\",\n        type: \"date\"\n    },\n    margin: {\n        l: 30,\n        r: 0,\n        t: 40,\n        b: 40,\n  }\n};\n\n// Display using Plotly\n// Plotly.newPlot(\"myPlot\", data, layout);\nPlotly.newPlot(\"myPlot\", [], layout);\n\nscope.$watch('msg', function(msg, old, scope) {\n    // console.log(\"old: \" + JSON.stringify(old));\n    console.log(\"data received: \" + JSON.stringify(msg));\n    if (msg) {\n        Plotly.react(\"myPlot\", msg.payload, layout);\n    }\n});\n\n</script>\n",
         "storeOutMessages": false,
         "fwdInMessages": false,
-        "resendOnRefresh": false,
+        "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
         "x": 630,
         "y": 380,
         "wires": [
-            []
+            [
+                "98f2c388ede48a50"
+            ]
         ]
     },
     {
@@ -5116,8 +5117,8 @@
                 "t": "set",
                 "p": "count",
                 "pt": "msg",
-                "to": "18000",
-                "tot": "num"
+                "to": "30*60*12",
+                "tot": "jsonata"
             }
         ],
         "action": "",
@@ -5129,7 +5130,7 @@
         "y": 280,
         "wires": [
             [
-                "7f670ec81b77872a"
+                "affa02bb2bf65365"
             ]
         ]
     },
@@ -5156,6 +5157,262 @@
             [
                 "7f670ec81b77872a"
             ]
+        ]
+    },
+    {
+        "id": "6f87bb211bd3a048",
+        "type": "join",
+        "z": "1436d6b5cc05b82e",
+        "name": "",
+        "mode": "custom",
+        "build": "array",
+        "property": "",
+        "propertyType": "full",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "10",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 770,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "affa02bb2bf65365",
+        "type": "batch",
+        "z": "1436d6b5cc05b82e",
+        "name": "",
+        "mode": "interval",
+        "count": 10,
+        "overlap": 0,
+        "interval": "5",
+        "allowEmptySequence": false,
+        "topics": [],
+        "x": 890,
+        "y": 220,
+        "wires": [
+            [
+                "29c6848b19bbc27d"
+            ]
+        ]
+    },
+    {
+        "id": "98f2c388ede48a50",
+        "type": "debug",
+        "z": "1436d6b5cc05b82e",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "3471bd97ced59b18",
+        "type": "debug",
+        "z": "1436d6b5cc05b82e",
+        "name": "batch",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1130,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "95151d45711a306e",
+        "type": "change",
+        "z": "1436d6b5cc05b82e",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$$",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1060,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "29c6848b19bbc27d",
+        "type": "join",
+        "z": "1436d6b5cc05b82e",
+        "name": "append per topic",
+        "mode": "reduce",
+        "build": "array",
+        "property": "",
+        "propertyType": "full",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "(\t    $o := $A ~> $lookup(topic);\t    $merge([\t        $A,\t        {\t            topic: {\t                \"x\": $append($o.x, timestamp),\t                \"y\": $append($o.y, payload)\t            }\t        }\t    ]);\t)",
+        "reduceInit": "graphs",
+        "reduceInitType": "flow",
+        "reduceFixup": "",
+        "x": 1090,
+        "y": 160,
+        "wires": [
+            [
+                "3471bd97ced59b18",
+                "97fe6104c0e99cf8",
+                "874e94da1177aec7"
+            ]
+        ]
+    },
+    {
+        "id": "c9e253fa5cd5df05",
+        "type": "template",
+        "z": "1436d6b5cc05b82e",
+        "name": "plotly template",
+        "field": "template",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<div id=\"myPlot\" style=\"width:306px\"></div>\n\n<script>\n\nvar topics = [];\n\n// Define Layout\nvar layout = {\n//   xaxis: {range: [40, 160], title: \"Square Meters\"},\n//   yaxis: {range: [5, 16]},  \n//   title: \"House Prices vs. Size\",\n    showlegend: false,\n    xaxis: {\n        // tickformat: \"%a %H:%M\",\n        type: \"date\"\n    },\n    margin: {\n        l: 30,\n        r: 0,\n        t: 40,\n        b: 40,\n  }\n};\n\n// const data = JSON.parse(\"\");\n\n// Display using Plotly\nPlotly.newPlot(\"myPlot\", {{{payload}}}, layout);\n// Plotly.newPlot(\"myPlot\", [], layout);\n/*\nscope.$watch('msg', function(msg, old, scope) {\n    console.log(\"old: \" + JSON.stringify(old));\n    console.log(\"data received: \" + JSON.stringify(msg));\n    if (msg) {\n        if (msg.graphs) {\n            const data = Object.entries(msg.graphs).map(kv => {\n                return {\n                    name: kv[0],\n                    x: kv[1].x,\n                    y: kv[1].y\n                };\n            });\n            Plotly.newPlot(\"myPlot\", data, layout);\n            topics = Object.keys(msg.graphs);\n        } else {\n            if (!topics.includes(msg.topic)) {\n                topics.push(msg.topic);\n                Plotly.addTraces(\"myPlot\", {\n                    name: msg.topic,\n                    x: [msg.timestamp],\n                    y: [msg.payload]\n                });\n            } else {\n                Plotly.extendTraces(\n                    \"myPlot\",\n                    {\n                        x: [[msg.timestamp]],\n                        y: [[msg.payload]]\n                    },\n                    [topics.indexOf(msg.topic)],\n                    msg.count||10\n                );\n            }\n        }\n    }\n    \n    scope.send({payload: 42});\n});\n*/\n</script>\n",
+        "output": "str",
+        "x": 1080,
+        "y": 60,
+        "wires": [
+            [
+                "fd72c57e00673fdb"
+            ]
+        ]
+    },
+    {
+        "id": "fd72c57e00673fdb",
+        "type": "debug",
+        "z": "1436d6b5cc05b82e",
+        "name": "template",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "template",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1260,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "201341483a443e97",
+        "type": "json",
+        "z": "1436d6b5cc05b82e",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 910,
+        "y": 60,
+        "wires": [
+            [
+                "c9e253fa5cd5df05"
+            ]
+        ]
+    },
+    {
+        "id": "97fe6104c0e99cf8",
+        "type": "change",
+        "z": "1436d6b5cc05b82e",
+        "name": "Plotly data",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.$each(function($v, $k){$merge([$v, {\"name\": $k}])})",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 670,
+        "y": 60,
+        "wires": [
+            [
+                "eee0ef99d1c78e9e",
+                "7f670ec81b77872a"
+            ]
+        ]
+    },
+    {
+        "id": "eee0ef99d1c78e9e",
+        "type": "debug",
+        "z": "1436d6b5cc05b82e",
+        "name": "data",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "874e94da1177aec7",
+        "type": "change",
+        "z": "1436d6b5cc05b82e",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "graphs",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1300,
+        "y": 160,
+        "wires": [
+            []
         ]
     },
     {
